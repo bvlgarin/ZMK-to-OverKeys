@@ -23,175 +23,92 @@ BT_SEL auto-fix – Handles multi-token Bluetooth selection commands
 
 
 
-# ZMK to OverKeys Converter
+# OverKeys Converter for ZMK
 
-<div align="center">
+### Automatically convert ZMK keyboard layouts to OverKeys JSON
 
-[![Release](https://img.shields.io/github/v/release/bvlgarin/zmk-to-overkeys?label=Release&style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/bvlgarin/zmk-to-overkeys/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/YOUR_USERNAME/zmk-to-overkeys/total?label=Downloads&style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/bvlgarin/zmk-to-overkeys/releases)
-[![License](https://img.shields.io/github/license/YOUR_USERNAME/zmk-to-overkeys?style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/bvlgarin/zmk-to-overkeys/blob/main/LICENSE)
-[![Stars](https://img.shields.io/github/stars/YOUR_USERNAME/zmk-to-overkeys?style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/bvlgarin/zmk-to-overkeys/stargazers)
-
-**Automatically convert ZMK keyboard layouts to OverKeys JSON format**
-
-[Quick Start](#quick-start) · [Features](#features) · [Supported Behaviors](#supported-behaviors) · [Documentation](#documentation) · [Contributing](#contributing)
-
-</div>
-
----
+<br />
 
 ## About The Project
 
-**ZMK to OverKeys Converter** is a Python script that automatically transforms ZMK firmware keymap files (`.dtsi` or `.keymap`) into the JSON format required by [OverKeys](https://github.com/conventoangelo/OverKeys) — a keyboard layout visualizer for Windows.
+**OverKeys Converter for ZMK** is a Python script that transforms ZMK firmware keymap files (`.dtsi` or `.keymap`) into the JSON format required by [OverKeys](https://github.com/conventoangelo/OverKeys) — a keyboard layout visualizer for Windows.
 
 If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle, or any split keyboard) and want to visualize your layers in OverKeys, this converter does all the heavy lifting for you.
 
 ### Why use this converter?
 
-| Problem | Solution |
-|---------|----------|
-| Manual conversion is tedious | One command converts everything |
-| ZMK syntax doesn't match OverKeys | Full behavior mapping (`&kp`, `&mt`, `&lt`, `&mo`, `&td`, etc.) |
-| Multiple layers need proper triggers | Auto-detects layer type (held/toggle) and assigns F14-F18 |
-| Russian layout setup takes time | Auto-generated from your base layer (ЙЦУКЕН) |
-
-**[Back to top](#zmk-to-overkeys-converter)**
-
----
+- **Manual conversion is tedious** – One command converts everything
+- **ZMK syntax doesn't match OverKeys** – Full behavior mapping (`&kp`, `&mt`, `&lt`, `&mo`, `&td`, etc.)
+- **Multiple layers need proper triggers** – Auto-detects layer type (held/toggle) and assigns F14-F18
+- **Russian layout setup takes time** – Auto-generated from your base layer (ЙЦУКЕН)
 
 ## Features
 
-- **Full ZMK Support** — Converts `&kp`, `&mt`, `&lt`, `&mo`, `&tog`, `&lt_tog`, `&hm`, `&td`, `&bt`, `&out`, `&bootloader`, `&sys_reset`
-- **Auto Layer Discovery** — Finds all layers via `display-name` in your ZMK keymap
-- **Smart Classification** — Automatically assigns F14-F18 triggers based on layer names
-- **Hold vs Toggle Detection** — Distinguishes between momentary (`held`) and toggle layers
-- **Russian Layout Generation** — Auto-creates ЙЦУКЕН layout from your base layer
-- **42-Key Matrix Support** — Standard 4×12 matrix with thumb cluster (positions 36-42)
-- **Bluetooth Command Handling** — Properly parses `&bt BT_CLR` and `&bt BT_SEL N`
-- **Tap-Dance Recognition** — Smart mapping for `&td*` patterns
-- **Zero Dependencies** — Pure Python 3.6+, no external packages required
+- **Full ZMK Support** – Converts `&kp`, `&mt`, `&lt`, `&mo`, `&tog`, `&lt_tog`, `&hm`, `&td`, `&bt`, `&out`, `&bootloader`, `&sys_reset`
+- **Auto Layer Discovery** – Finds all layers via `display-name` in your ZMK keymap
+- **Smart Classification** – Automatically assigns F14-F18 triggers based on layer names
+- **Hold vs Toggle Detection** – Distinguishes between momentary (`held`) and toggle layers
+- **Russian Layout Generation** – Auto-creates ЙЦУКЕН layout from your base layer
+- **42-Key Matrix Support** – Standard 4×12 matrix with thumb cluster (positions 36-42)
+- **Bluetooth Command Handling** – Properly parses `&bt BT_CLR` and `&bt BT_SEL N`
+- **Tap-Dance Recognition** – Smart mapping for `&td*` patterns
+- **Zero Dependencies** – Pure Python 3.6+, no external packages required
 
-**[Back to top](#zmk-to-overkeys-converter)**
-
----
-
-## Supported Behaviors
-
-| ZMK Behavior | Description | OverKeys Output |
-|--------------|-------------|-----------------|
-| `&kp A` | Key press | `A` |
-| `&mt LSHIFT A` | Mod-tap | `A` |
-| `&lt 1 SPACE` | Layer-tap | `SPC` |
-| `&mo 1` | Momentary layer | `MO(1)` |
-| `&tog 1` | Toggle layer | `TG(1)` |
-| `&lt_tog 1 A` | Layer-tap toggle | `A` |
-| `&hm LCTRL A` | Hold-mod | `A` |
-| `&tdJ` | Tap-dance | `J` |
-| `&bt BT_CLR` | Bluetooth clear | `BT CLR` |
-| `&bt BT_SEL 0` | Bluetooth select | `BT 0` |
-| `&out USB` | Output selection | `USB` |
-| `&bootloader` | Bootloader mode | `BOOT` |
-| `&sys_reset` | System reset | `RST` |
-| `&trans` | Transparent | `""` (empty) |
-
-**[Back to top](#zmk-to-overkeys-converter)**
-
----
-
-## Layer Detection
-
-The converter automatically assigns F-key triggers based on layer name keywords:
-
-| Layer Name Keywords | Trigger | Type |
-|---------------------|---------|------|
-| `lower`, `lwr`, `num`, `sym`, `number`, `symbols`, `pad` | `F14` | `held` |
-| `raise`, `rse`, `nav`, `navi`, `navigation`, `mov`, `cursor` | `F15` | `held` |
-| `fbuttons`, `fbt`, `fun`, `func`, `function`, `fkeys` | `F16` | `held` |
-| `adjust`, `adj`, `settings`, `set`, `config` | `F17` | `held` |
-| `ru`, `rus`, `russian`, `lang` | `F18` | `toggle` |
-
-> **Note:** Base layers (`base`, `default`, `qwerty`, `main`, `colemak`, `dvorak`, `workman`) receive no trigger — they become the default layout.
-
-**[Back to top](#zmk-to-overkeys-converter)**
-
----
-
-## Quick Start
+## Getting Started
 
 ### Installation
 
+You can use the converter in two ways:
+
+**1. Download the script directly**
+
 ```bash
-# Download the script
 curl -O https://raw.githubusercontent.com/YOUR_USERNAME/zmk-to-overkeys/main/zmk_to_overkeys.py
 chmod +x zmk_to_overkeys.py
 
-### Usage
-```bash
+2. Clone the repository
+
+bash
+git clone https://github.com/YOUR_USERNAME/zmk-to-overkeys.git
+cd zmk-to-overkeys
+Usage
+bash
 python zmk_to_overkeys.py path/to/your/keymap.keymap
-
-### Example
-```bash
+Example
+bash
 python zmk_to_overkeys.py config/corne.keymap
+Output: config/corne.overkeys.txt – ready to copy into OverKeys.
 
-Output: config/corne.overkeys.txt — ready to copy into OverKeys.
+For detailed conversion instructions, see the Documentation.
 
-### Usage Examples
+Requirements
+Python 3.6 or higher
 
-Basic ZMK Keymap
-Input (corne.keymap):
+ZMK keymap file (.dtsi or .keymap format)
 
-dts
-default_layer {
-    display-name = "BASE";
-    bindings = <
-        &kp Q    &kp W    &kp E    &kp R    &kp T
-        &kp A    &kp S    &kp D    &kp F    &kp G
-        &kp Z    &kp X    &kp C    &kp V    &kp B
-        &kp SPACE  &mo 1   &kp RET
-    >;
-};
+Supported Behaviors
+ZMK Behavior	Description	OverKeys Output
+&kp A	Key press	A
+&mt LSHIFT A	Mod-tap	A
+&lt 1 SPACE	Layer-tap	SPC
+&mo 1	Momentary layer	MO(1)
+&tog 1	Toggle layer	TG(1)
+&lt_tog 1 A	Layer-tap toggle	A
+&hm LCTRL A	Hold-mod	A
+&tdJ	Tap-dance	J
+&bt BT_CLR	Bluetooth clear	BT CLR
+&bt BT_SEL 0	Bluetooth select	BT 0
+&out USB	Output selection	USB
+&bootloader	Bootloader mode	BOOT
+&sys_reset	System reset	RST
+&trans	Transparent	"" (empty)
+Layer Detection
+The converter automatically assigns F-key triggers based on layer name keywords:
 
-lower_layer {
-    display-name = "LOWER";
-    bindings = <
-        &kp N1   &kp N2   &kp N3   &kp N4   &kp N5
-        &kp EXCL &kp AT   &kp HASH &kp DLLR &kp PRCNT
-        &trans   &kp MINUS &kp EQUAL &kp BSPC
-    >;
-};
-Output (OverKeys JSON):
-
-json
-"userLayouts": [
-    {
-        "name": "DEFAULT",
-        "keys": [
-            ["Q","W","E","R","T","Y","U","I","O","P","",""],
-            ["A","S","D","F","G","H","J","K","L","","",""],
-            ["Z","X","C","V","B","N","M","BSPC","","","",""],
-            ["LGUI","LALT","SPC","MO(1)","ENT","","","","","","",""]
-        ],
-        "trigger": "",
-        "type": ""
-    },
-    {
-        "name": "LOWER",
-        "keys": [
-            ["1","2","3","4","5","6","7","8","9","0","",""],
-            ["!","@","#","$","%","^","&","*","(",")","",""],
-            ["","-","=","[","]","\\","`","","","","",""],
-            ["","","","","","","","","","","",""]
-        ],
-        "trigger": "F14",
-        "type": "held"
-    }
-],
-"defaultUserLayout": "DEFAULT"
-Advanced Examples
-dts
-&mt LSHIFT A     →  A
-&tdJ             →  J
-&bt BT_SEL 0     →  BT 0
-&mo 1            →  MO(1)
-&tog 2           →  TG(2)
-&lt_tog 1 SPACE  →  SPC
+Layer Name Keywords	Trigger	Type
+lower, lwr, num, sym, number, symbols, pad	F14	held
+raise, rse, nav, navi, navigation, mov, cursor	F15	held
+fbuttons, fbt, fun, func, function, fkeys	F16	held
+adjust, adj, settings, set, config	F17	held
+ru, rus, russian, lang	F18	toggle
+Note: Base layers (base, default, qwerty, main, colemak, dvorak, workman) receive no trigger — they become the default layout.
