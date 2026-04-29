@@ -95,3 +95,40 @@ Note: Base layers (base, default, qwerty, main, colemak, dvorak, workman) receiv
 For custom layer names, the converter uses heuristics to determine the appropriate trigger. Unknown layer names default to no trigger.
 
 <p align="right">(<a href="#overkeys-converter-for-zmk">back to top</a>)</p>
+
+
+
+
+// ============================================================
+// OverKeys Layout JSON
+// Generated from: corne.keymap
+// Date: 2024-01-15 14:30:00
+// ============================================================
+
+"userLayouts": [
+    {
+        "name": "DEFAULT",
+        "keys": [ /* 4x12 matrix */ ],
+        "trigger": "",
+        "type": ""
+    },
+    {
+        "name": "LOWER",
+        "keys": [ /* 4x12 matrix */ ],
+        "trigger": "F14",
+        "type": "held"
+    },
+    {
+        "name": "RAISE",
+        "keys": [ /* 4x12 matrix */ ],
+        "trigger": "F15",
+        "type": "held"
+    },
+    {
+        "name": "RUSSIAN",
+        "keys": [ /* Auto-generated ЙЦУКЕН */ ],
+        "trigger": "F18",
+        "type": "toggle"
+    }
+],
+"defaultUserLayout": "DEFAULT"
