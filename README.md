@@ -63,35 +63,28 @@ You can use the converter in two ways:
 
 **1. Download the script directly**
 
-Supported Behaviors
-ZMK Behavior	Description	OverKeys Output
-&kp A	Key press	A
-&mt LSHIFT A	Mod-tap	A
-&lt 1 SPACE	Layer-tap	SPC
-&mo 1	Momentary layer	MO(1)
-&tog 1	Toggle layer	TG(1)
-&lt_tog 1 A	Layer-tap toggle	A
-&hm LCTRL A	Hold-mod	A
-&tdJ	Tap-dance	J
-&bt BT_CLR	Bluetooth clear	BT CLR
-&bt BT_SEL 0	Bluetooth select	BT 0
-&out USB	Output selection	USB
-&bootloader	Bootloader mode	BOOT
-&sys_reset	System reset	RST
-&trans	Transparent	"" (empty)
-&none	None	"" (empty)
-<p align="right">(<a href="#overkeys-converter-for-zmk">back to top</a>)</p>
-Layer Detection
-The converter automatically assigns F-key triggers based on layer name keywords:
+```bash
+curl -O https://raw.githubusercontent.com/YOUR_USERNAME/zmk-to-overkeys/main/zmk_to_overkeys.py
+chmod +x zmk_to_overkeys.py
+2. Clone the repository
 
-Layer Name Keywords	Trigger	Type
-lower, lwr, num, sym, number, symbols, pad	F14	held
-raise, rse, nav, navi, navigation, mov, cursor	F15	held
-fbuttons, fbt, fun, func, function, fkeys	F16	held
-adjust, adj, settings, set, config	F17	held
-ru, rus, russian, lang	F18	toggle
-Note: Base layers (base, default, qwerty, main, colemak, dvorak, workman) receive no trigger — they become the default layout.
+bash
+git clone https://github.com/YOUR_USERNAME/zmk-to-overkeys.git
+cd zmk-to-overkeys
+Usage
+bash
+python zmk_to_overkeys.py path/to/your/keymap.keymap
+Example
 
-For custom layer names, the converter uses heuristics to determine the appropriate trigger. Unknown layer names default to no trigger.
+bash
+python zmk_to_overkeys.py config/corne.keymap
+Output: config/corne.overkeys.txt — ready to copy into OverKeys.
+
+Requirements
+Python 3.6 or higher
+
+ZMK keymap file (.dtsi or .keymap format)
+
+For detailed usage instructions, see the Documentation section below.
 
 <p align="right">(<a href="#overkeys-converter-for-zmk">back to top</a>)</p>
