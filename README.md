@@ -19,41 +19,6 @@ Russian layout generation – Auto-creates Russian layer from base layer (Cyrill
 BT_SEL auto-fix – Handles multi-token Bluetooth selection commands
 
 
-### Installation
-
-```bash
-# Download the script
-curl -O https://raw.githubusercontent.com/YOUR_REPO/zmk_to_overkeys.py
-chmod +x zmk_to_overkeys.py
-
-### Usage
-```bash
-python zmk_to_overkeys.py config/corne.keymap
-
-### Example Output
-"userLayouts": [
-    {
-        "name": "DEFAULT",
-        "keys": [["Q","W","E","R","T","Y","U","I","O","P","",""], ...],
-        "trigger": "",
-        "type": ""
-    },
-    {
-        "name": "LOWER",
-        "keys": [["1","2","3","4","5","6","7","8","9","0","",""], ...],
-        "trigger": "F14",
-        "type": "held"
-    }
-],
-"defaultUserLayout": "DEFAULT"
-
-### Requirements
-Python 3.6+
-ZMK keymap file in .dtsi or .keymap format
-
-
-
-
 
 
 
@@ -62,7 +27,7 @@ ZMK keymap file in .dtsi or .keymap format
 
 <div align="center">
 
-[![Release](https://img.shields.io/github/v/release/YOUR_USERNAME/zmk-to-overkeys?label=Release&style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/YOUR_USERNAME/zmk-to-overkeys/releases/latest)
+[![Release](https://img.shields.io/github/v/release/bvlgarin/zmk-to-overkeys?label=Release&style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/YOUR_USERNAME/zmk-to-overkeys/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/YOUR_USERNAME/zmk-to-overkeys/total?label=Downloads&style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/YOUR_USERNAME/zmk-to-overkeys/releases)
 [![License](https://img.shields.io/github/license/YOUR_USERNAME/zmk-to-overkeys?style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/YOUR_USERNAME/zmk-to-overkeys/blob/main/LICENSE)
 [![Stars](https://img.shields.io/github/stars/YOUR_USERNAME/zmk-to-overkeys?style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/YOUR_USERNAME/zmk-to-overkeys/stargazers)
