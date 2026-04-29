@@ -1,0 +1,513 @@
+#!/usr/bin/env python3
+
+import re
+import json
+import sys
+from pathlib import Path
+from datetime import datetime
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
+LAYER_TRIGGERS = {
+    "lower": "F14", "lwr": "F14", "num": "F14", "numb": "F14",
+    "numbers": "F14", "sym": "F14", "symbols": "F14", "number": "F14",
+    "raise": "F15", "rse": "F15", "nav": "F15", "navi": "F15",
+    "navigation": "F15", "mov": "F15", "move": "F15", "movement": "F15",
+    "fbuttons": "F16", "fbt": "F16", "fun": "F16", "func": "F16",
+    "function": "F16", "fkeys": "F16",
+    "adjust": "F17", "adj": "F17", "settings": "F17", "set": "F17", "config": "F17",
+    "ru": "F18", "russian": "F18", "rus": "F18", "russia": "F18",
+}
+
+LAYER_TYPES = {
+    "held": ["lower", "lwr", "num", "numb", "numbers", "sym", "symbols", "number",
+             "raise", "rse", "nav", "navi", "navigation", "mov", "move", "movement",
+             "fbuttons", "fbt", "fun", "func", "function", "fkeys",
+             "adjust", "adj", "settings", "set", "config"],
+    "toggle": ["ru", "russian", "rus", "russia"],
+}
+
+BASE_LAYER_NAMES = ["base", "default", "qwerty", "main", "def", "bse", "colemak", "dvorak", "workman"]
+
+ZMK_MAP = {
+    # Letters
+    "Q": "Q", "W": "W", "E": "E", "R": "R", "T": "T", "Y": "Y", "U": "U", "I": "I", "O": "O", "P": "P",
+    "A": "A", "S": "S", "D": "D", "F": "F", "G": "G", "H": "H", "J": "J", "K": "K", "L": "L",
+    "Z": "Z", "X": "X", "C": "C", "V": "V", "B": "B", "N": "N", "M": "M",
+
+    # Numbers and keypad
+    "N1": "1", "N2": "2", "N3": "3", "N4": "4", "N5": "5",
+    "N6": "6", "N7": "7", "N8": "8", "N9": "9", "N0": "0",
+    "NUMBER_1": "1", "NUMBER_2": "2", "NUMBER_3": "3", "NUMBER_4": "4", "NUMBER_5": "5",
+    "NUMBER_6": "6", "NUMBER_7": "7", "NUMBER_8": "8", "NUMBER_9": "9", "NUMBER_0": "0",
+    "KP_N1": "1", "KP_N2": "2", "KP_N3": "3", "KP_NUM": "NUM",
+
+    # Modifiers
+    "ESC": "ESC", "ESCAPE": "ESC", "TAB": "TAB",
+    "LSHFT": "LSFT", "RSHFT": "RSFT", "LEFT_SHIFT": "LSFT", "RIGHT_SHIFT": "RSFT",
+    "LCTRL": "LCTL", "RCTRL": "RCTL", "LEFT_CONTROL": "LCTL", "RIGHT_CONTROL": "RCTL",
+    "LALT": "LALT", "RALT": "RALT", "LEFT_ALT": "LALT", "RIGHT_ALT": "RALT",
+    "LGUI": "LGUI", "RGUI": "RGUI", "LEFT_GUI": "LGUI", "RIGHT_GUI": "RGUI",
+    "LCMD": "LCMD", "RCMD": "RCMD",
+
+    # Special keys
+    "RET": "ENT", "ENTER": "ENT", "RETURN": "ENT",
+    "SPACE": "SPC", "SPC": "SPC", "BSPC": "BSPC", "BACKSPACE": "BSPC", "BKSP": "BSPC",
+    "DEL": "DEL", "DELETE": "DEL", "CAPSLOCK": "CAPS", "CAPS": "CAPS",
+    "PRINTSCREEN": "PRTSC", "INSERT": "INS", "INS": "INS",
+
+    # Arrows
+    "LEFT_ARROW": "←", "RIGHT_ARROW": "→", "UP_ARROW": "↑", "DOWN_ARROW": "↓",
+    "PAGE_UP": "PGUP", "PAGE_DOWN": "PGDN", "PG_UP": "PGUP", "PG_DN": "PGDN",
+    "PGUP": "PGUP", "PGDN": "PGDN",
+
+    # Media
+    "C_VOLUME_UP": "VOL+", "C_VOLUME_DOWN": "VOL-", "C_VOL_DN": "VOL-",
+    "K_MUTE": "MUTE", "C_PREV": "⏮", "C_NEXT": "⏭", "C_PLAY_PAUSE": "⏯",
+
+    # Punctuation
+    "SEMI": ";", "SEMICOLON": ";", "SQT": "'", "QUOTE": "'", "APOSTROPHE": "'",
+    "COMMA": ",", "DOT": ".", "PERIOD": ".", "FSLH": "/", "SLASH": "/",
+    "BSLH": "\\", "BACKSLASH": "\\", "GRAVE": "`", "TILDE": "~",
+    "MINUS": "-", "KP_MINUS": "-", "PLUS": "+", "KP_PLUS": "+",
+    "EQUAL": "=", "KP_EQUAL": "=", "EXCL": "!", "EXCLAMATION": "!",
+    "AT": "@", "HASH": "#", "DLLR": "$", "DOLLAR": "$",
+    "PRCNT": "%", "PERCENT": "%", "CARET": "^", "AMPS": "&", "AMPERSAND": "&",
+    "ASTRK": "*", "ASTERISK": "*", "KP_MULTIPLY": "*",
+    "LPAR": "(", "LEFT_PARENTHESIS": "(", "RPAR": ")", "RIGHT_PARENTHESIS": ")",
+    "LBKT": "[", "LBRC": "[", "LEFT_BRACKET": "[",
+    "RBKT": "]", "RBRC": "]", "RIGHT_BRACKET": "]",
+    "LBRACE": "{", "LEFT_BRACE": "{", "RBRACE": "}", "RIGHT_BRACE": "}",
+    "COLON": ":", "PIPE": "|", "UNDERSCORE": "_", "UNDER": "_",
+    "DOUBLE_QUOTES": '"', "LA": "<", "RA": ">",
+
+    # Navigation
+    "HOME": "HOME", "END": "END", "UP": "↑", "DOWN": "↓", "LEFT": "←", "RIGHT": "→",
+
+    # F-keys
+    "F1": "F1", "F2": "F2", "F3": "F3", "F4": "F4", "F5": "F5", "F6": "F6",
+    "F7": "F7", "F8": "F8", "F9": "F9", "F10": "F10", "F11": "F11", "F12": "F12",
+    "F13": "F13", "F14": "F14", "F15": "F15", "F16": "F16", "F17": "F17", "F18": "F18",
+    "F19": "F19", "F20": "F20", "F21": "F21", "F22": "F22", "F23": "F23", "F24": "F24",
+
+    # System
+    "bootloader": "BOOT", "sys_reset": "RST", "reset": "RST",
+    "studio_unlock": "STU", "OUT_TOG": "OUT",
+    "BT_CLR": "BT CLR", "BT_SEL": "BT",
+    "ext_power": "PWR", "soft_off": "OFF",
+    "trans": "", "none": "",
+}
+
+TAP_DANCE_MAP = {
+    "&tdF": "F", "&tdJ": "J",
+    "&tdTaskmgr": "ESC", "&tdW": "W", "&tdE": "E", "&tdI": "I", "&tdO": "O",
+    "&tdLCMD": "ENT", "&tdRCMD": "SPC",
+    "&td_TS2": "I", "&tdTEST": "ENT",
+    "&td_tsk_mngr": "ESC", "&td_lcmd": "ENT", "&td_rcmd": "SPC",
+    "&td_e": "E", "&td_w": "W", "&td_i": "I", "&td_o": "O",
+}
+
+RUSSIAN_MAP = {
+    "Q": "Й", "W": "Ц", "E": "У", "R": "К", "T": "Е", "Y": "Н", "U": "Г", "I": "Ш", "O": "Щ", "P": "З",
+    "A": "Ф", "S": "Ы", "D": "В", "F": "А", "G": "П", "H": "Р", "J": "О", "K": "Л", "L": "Д",
+    "Z": "Я", "X": "Ч", "C": "С", "V": "М", "B": "И", "N": "Т", "M": "Ь",
+    "[": "Х", "]": "Ъ", ";": "Ж", "'": "Э", ",": "Б", ".": "Ю", "/": ".",
+    "ESC": "ESC", "TAB": "ТАБ", "LSFT": "SHFT", "LCTL": "LCTL",
+    "MO(1)": "MO(1)", "MO(2)": "MO(2)", "MO(3)": "MO(3)", "MO(4)": "MO(4)",
+    "BSPC": "BSPC", "LGUI": "LGUI", "SPC": "ПРОБ", "ENT": "ВВОД", "CAPS": "CAPS",
+}
+
+
+# ============================================================
+# TOKEN PARSER
+# ============================================================
+
+def parse_token(token):
+    """Parse a single ZMK token"""
+    token = token.strip()
+    if not token:
+        return ""
+    if token in ["&trans", "&none"]:
+        return ""
+
+    # &kp KEY
+    if token.startswith("&kp "):
+        code = token[4:].strip()
+        match = re.match(r'^(L[GAS]|R[GAS]|LS|RS|LC|RC|LA|RA)\(([^)]+)\)$', code)
+        if match:
+            return ZMK_MAP.get(match.group(2), match.group(2))
+        return ZMK_MAP.get(code, code)
+
+    # &mt MOD KEY
+    if token.startswith("&mt "):
+        parts = token.split()
+        if len(parts) >= 3:
+            return ZMK_MAP.get(parts[2], parts[2])
+        return ""
+
+    # &lt LAYER KEY
+    if token.startswith("&lt "):
+        parts = token.split()
+        if len(parts) >= 3:
+            return ZMK_MAP.get(parts[2], parts[2])
+        return ""
+
+    # &mo LAYER
+    if token.startswith("&mo "):
+        return f"MO({token[4:].strip()})"
+
+    # &tog LAYER
+    if token.startswith("&tog "):
+        return f"TG({token[5:].strip()})"
+
+    # &lt_tog / &c_lt_tog LAYER KEY
+    if token.startswith("&lt_tog ") or token.startswith("&c_lt_tog "):
+        parts = token.split()
+        if len(parts) >= 3:
+            return ZMK_MAP.get(parts[2], parts[2])
+        return ""
+
+    # &hm MOD KEY
+    if token.startswith("&hm "):
+        parts = token.split()
+        if len(parts) >= 3:
+            return ZMK_MAP.get(parts[2], parts[2])
+        return ""
+
+    # &td / &td_ (tap-dance)
+    if token.startswith("&td"):
+        if token in TAP_DANCE_MAP:
+            return TAP_DANCE_MAP[token]
+        name = token[1:]
+        if name.startswith("td_"):
+            name = name[3:]
+        elif name.startswith("td"):
+            name = name[2:]
+        display = name.split("_")[0].upper()
+        return display if len(display) <= 3 else display[:3]
+
+    # &out OUT_TYPE
+    if token.startswith("&out "):
+        out_type = token[5:].strip()
+        return ZMK_MAP.get(out_type, out_type[:4])
+
+    # &bt BT_CLR / &bt BT_SEL N
+    if token.startswith("&bt "):
+        if "BT_CLR" in token:
+            return "BT CLR"
+        if "BT_SEL" in token:
+            parts = token.split()
+            if len(parts) >= 3:
+                return f"BT {parts[2]}"
+        return token[4:].strip()[:6]
+
+    # System commands
+    if token == "&bootloader": return "BOOT"
+    if token == "&sys_reset": return "RST"
+    if token == "&reset": return "RST"
+    if token == "&studio_unlock": return "STU"
+    if token == "&soft_off": return "OFF"
+    if token.startswith("&ext_power "): return token[12:].strip()[:4]
+
+    # Unknown — return as is
+    return token.replace("&", "")[:8]
+
+
+# ============================================================
+# BINDINGS PARSER
+# ============================================================
+
+def parse_bindings_block(bindings_str):
+    """Parse a bindings string into tokens with BT_SEL auto-fix"""
+    # Remove comments and line breaks
+    bindings_str = re.sub(r'//[^\n]*', '', bindings_str)
+    bindings_str = re.sub(r'/\*.*?\*/', '', bindings_str, flags=re.DOTALL)
+    bindings_str = bindings_str.replace('\n', ' ').replace('\r', ' ')
+
+    raw_tokens = bindings_str.split()
+    tokens = []
+    i = 0
+
+    while i < len(raw_tokens):
+        tok = raw_tokens[i]
+
+        # &bt BT_CLR / &bt BT_SEL N
+        if tok == "&bt" and i + 1 < len(raw_tokens):
+            if raw_tokens[i+1] == "BT_CLR":
+                tokens.append("&bt BT_CLR")
+                i += 2
+                continue
+            elif raw_tokens[i+1] == "BT_SEL" and i + 2 < len(raw_tokens):
+                tokens.append(f"&bt BT_SEL {raw_tokens[i+2]}")
+                i += 3
+                continue
+
+        # &out OUT_TYPE
+        if tok == "&out" and i + 1 < len(raw_tokens):
+            tokens.append(f"&out {raw_tokens[i+1]}")
+            i += 2
+            continue
+
+        # &ext_power
+        if tok == "&ext_power" and i + 1 < len(raw_tokens):
+            tokens.append(f"&ext_power {raw_tokens[i+1]}")
+            i += 2
+            continue
+
+        # Triple tokens: &lt_tog, &c_lt_tog, &mt, &lt, &hm
+        if tok in ["&lt_tog", "&c_lt_tog", "&mt", "&lt", "&hm"] and i + 2 < len(raw_tokens):
+            tokens.append(f"{tok} {raw_tokens[i+1]} {raw_tokens[i+2]}")
+            i += 3
+            continue
+
+        # Double tokens: &kp, &mo, &tog
+        if tok in ["&kp", "&mo", "&tog"] and i + 1 < len(raw_tokens):
+            tokens.append(f"{tok} {raw_tokens[i+1]}")
+            i += 2
+            continue
+
+        # Single tokens
+        if tok.startswith("&"):
+            tokens.append(tok)
+
+        i += 1
+
+    return tokens
+
+
+# ============================================================
+# MATRIX BUILDER
+# ============================================================
+
+def tokens_to_matrix(tokens):
+    """Convert tokens to a 4x12 matrix"""
+    values = [parse_token(t) for t in tokens]
+
+    while len(values) < 42:
+        values.append("")
+    values = values[:42]
+
+    matrix = [
+        values[0:12],
+        values[12:24],
+        values[24:36],
+        ["", "", "", "", "", "", "", "", "", "", "", ""]
+    ]
+
+    thumbs = values[36:42]
+    for idx, col in enumerate([3, 4, 5, 6, 7, 8]):
+        if idx < len(thumbs):
+            matrix[3][col] = thumbs[idx]
+
+    return matrix
+
+
+# ============================================================
+# LAYER EXTRACTION
+# ============================================================
+
+def extract_layer_bindings(content, layer_name):
+    """Extract bindings for a specific layer"""
+    clean = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+    clean = re.sub(r'//[^\n]*', '', clean)
+
+    patterns = [
+        rf'{layer_name}\s*\{{\s*display-name\s*=\s*"[^"]*";\s*bindings\s*=\s*<\s*([^>]*?)\s*>',
+        rf'{layer_name}\s*\{{\s*bindings\s*=\s*<\s*([^>]*?)\s*>',
+    ]
+
+    for pat in patterns:
+        match = re.search(pat, clean, re.DOTALL | re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+    return None
+
+
+def find_all_layers(content):
+    """Find all layers via display-name"""
+    clean = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+    clean = re.sub(r'//[^\n]*', '', clean)
+
+    display_names = re.findall(r'display-name\s*=\s*"([^"]*)"', clean)
+    layers = []
+
+    for dname in display_names:
+        pattern = rf'(\w+)\s*\{{\s*display-name\s*=\s*"{dname}"[^}}]*bindings\s*=\s*<([^>]+)>'
+        match = re.search(pattern, clean, re.DOTALL | re.IGNORECASE)
+        if match:
+            layer_name = match.group(1)
+            name = layer_name.replace("_layer", "") if layer_name.endswith("_layer") else layer_name
+            if name not in layers:
+                layers.append(name)
+
+    return layers
+
+
+# ============================================================
+# LAYER CLASSIFICATION
+# ============================================================
+
+def classify_layer(name):
+    """Determine layer trigger and type"""
+    name_lower = name.lower()
+
+    if name_lower in LAYER_TRIGGERS:
+        trigger = LAYER_TRIGGERS[name_lower]
+        ltype = "toggle" if name_lower in LAYER_TYPES.get("toggle", []) else "held"
+        return trigger, ltype
+
+    # Heuristics for unknown layer names
+    if any(kw in name_lower for kw in ["lower", "lwr", "num", "sym", "number", "symbol", "pad"]):
+        return "F14", "held"
+    if any(kw in name_lower for kw in ["raise", "rse", "nav", "mov", "navigat", "cursor"]):
+        return "F15", "held"
+    if any(kw in name_lower for kw in ["fbtn", "fkey", "func", "fun", "f1"]):
+        return "F16", "held"
+    if any(kw in name_lower for kw in ["adjust", "adj", "set", "config", "admin"]):
+        return "F17", "held"
+    if any(kw in name_lower for kw in ["ru", "rus", "russian", "lang"]):
+        return "F18", "toggle"
+
+    return "", ""
+
+
+def is_base_layer(name):
+    """Check if this is the base layer"""
+    name_lower = name.lower()
+    if name_lower in BASE_LAYER_NAMES:
+        return True
+    return any(kw in name_lower for kw in ["base", "default", "main", "qwerty", "colemak", "dvorak", "workman", "bse", "def"])
+
+
+# ============================================================
+# OUTPUT GENERATION
+# ============================================================
+
+def create_russian_layer(base_matrix):
+    """Create a Russian layer from the base layer"""
+    russian = []
+    for row in base_matrix:
+        russian.append([RUSSIAN_MAP.get(key, key) for key in row])
+    return russian
+
+
+def format_output(config):
+    """Format the JSON output"""
+    lines = ['"userLayouts": [']
+    for i, layer in enumerate(config["userLayouts"]):
+        lines.append('    {')
+        lines.append(f'        "name": "{layer["name"]}",')
+        lines.append('        "keys": [')
+        for j, row in enumerate(layer["keys"]):
+            comma = "," if j < len(layer["keys"]) - 1 else ""
+            lines.append(f'            {json.dumps(row, ensure_ascii=False)}{comma}')
+        lines.append('        ],')
+        lines.append(f'        "trigger": "{layer["trigger"]}",')
+        lines.append(f'        "type": "{layer["type"]}"')
+        lines.append('    },' if i < len(config["userLayouts"]) - 1 else '    }')
+    lines.append('],')
+    lines.append(f'"defaultUserLayout": "{config["defaultUserLayout"]}"')
+    return '\n'.join(lines)
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: python zmk_to_overkeys.py <path_to_keymap>")
+        sys.exit(1)
+
+    path = Path(sys.argv[1])
+    if not path.exists():
+        print(f"❌ File {path} not found")
+        sys.exit(1)
+
+    content = path.read_text(encoding='utf-8')
+    print(f"📖 Parsing {path.name}...")
+
+    all_layers = find_all_layers(content)
+    print(f"🔍 Found layers: {all_layers}")
+
+    if not all_layers:
+        print("❌ No layers found!")
+        sys.exit(1)
+
+    base_name = "BASE"
+    for name in all_layers:
+        if is_base_layer(name):
+            base_name = name.upper()
+            break
+
+    ordered = []
+    for name in all_layers:
+        if is_base_layer(name) and name.upper() == base_name:
+            ordered.insert(0, name)
+        elif name not in ordered:
+            ordered.append(name)
+
+    print(f"📋 Processing order: {ordered}")
+    print(f"📌 Base layer: {base_name}")
+
+    layers = []
+    base_matrix = None
+
+    for name in ordered:
+        print(f"  ✓ {name}")
+        bindings = extract_layer_bindings(content, name)
+        if not bindings:
+            continue
+
+        tokens = parse_bindings_block(bindings)
+        matrix = tokens_to_matrix(tokens)
+
+        if is_base_layer(name) and base_matrix is None:
+            base_matrix = matrix
+
+        trigger, ltype = classify_layer(name)
+
+        layers.append({
+            "name": name.upper(),
+            "keys": matrix,
+            "trigger": trigger,
+            "type": ltype
+        })
+
+    # Add Russian layer only if no language layer exists
+    has_lang = any(l["name"] in ["RU", "RUSSIAN"] for l in layers)
+    if base_matrix and not has_lang:
+        print("  ✓ RUSSIAN (auto-generated)")
+        layers.append({
+            "name": "RUSSIAN",
+            "keys": create_russian_layer(base_matrix),
+            "trigger": "F18",
+            "type": "toggle"
+        })
+
+    config = {
+        "userLayouts": layers,
+        "defaultUserLayout": base_name
+    }
+
+    formatted = format_output(config)
+
+    out_path = path.with_suffix('.overkeys.txt')
+    with open(out_path, 'w', encoding='utf-8') as f:
+        f.write("// ============================================================\n")
+        f.write(f"// OverKeys Layout JSON\n")
+        f.write(f"// Generated from: {path.name}\n")
+        f.write(f"// Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write("// ============================================================\n\n")
+        f.write(formatted)
+
+    print(f"\n✅ Saved to {out_path}")
+    print("\n" + "=" * 60)
+    print(formatted)
+    print("=" * 60)
+
+
+if __name__ == "__main__":
+    main()
