@@ -25,3 +25,7 @@ BT_SEL auto-fix – Handles multi-token Bluetooth selection commands
 # Download the script
 curl -O https://raw.githubusercontent.com/YOUR_REPO/zmk_to_overkeys.py
 chmod +x zmk_to_overkeys.py
+
+
+
+Features
