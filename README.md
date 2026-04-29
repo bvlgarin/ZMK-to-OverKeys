@@ -41,7 +41,7 @@ You can use the converter in two ways:
 curl -O https://raw.githubusercontent.com/YOUR_USERNAME/zmk-to-overkeys/main/zmk_to_overkeys.py
 chmod +x zmk_to_overkeys.py
 
-**2. Clone the repository**
+2. Clone the repository**
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/zmk-to-overkeys.git
