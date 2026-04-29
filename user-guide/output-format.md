@@ -1,77 +1,159 @@
 
-[*back to top*](#)
+**Output:** `config/corne.overkeys.txt` — ready to copy into OverKeys.
 
----
+### Requirements
 
-## Adding to OverKeys
+- Python 3.6 or higher
+- ZMK keymap file (`.dtsi` or `.keymap` format)
 
-Once you have generated the `.overkeys.txt` file:
-
-1. Open OverKeys on your Windows system
-2. Go to **Settings → User Layouts**
-3. Copy the entire `"userLayouts": [...]` block from the generated file
-4. Paste it into your OverKeys `settings.json` or user configuration
-5. Set `"defaultUserLayout"` to your base layer name (e.g., `"DEFAULT"`)
-6. Save and restart OverKeys
-
-Your ZMK layers will now be available in OverKeys!
+For detailed usage instructions, see the [Documentation](#documentation) section below.
 
 [*back to top*](#)
 
 ---
 
-## Contributing
+## Documentation
 
-Contributions are what make the open-source community such an amazing place to learn and collaborate. Any contributions to **ZMK to OverKeys Converter** are greatly appreciated.
+Complete documentation for the **ZMK to OverKeys Converter** is available in this README:
 
-If you have suggestions for improvements, bug fixes, or new features, please feel free to open an issue or submit a pull request.
+### Getting Started
+- [Installation](#installation)
+- [Usage](#usage)
+- [Requirements](#requirements)
 
-### How to Contribute
+### User Guide
+- [Supported Behaviors](#supported-behaviors)
+- [Layer Detection](#layer-detection)
+- [Output Format](#output-format)
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Areas for Contribution
-
-- Support for additional keyboard matrix sizes (34-key, 56-key)
-- More language layout generation (German, French, Spanish)
-- Additional tap-dance patterns
-- GUI drag-and-drop interface
-- Support for more ZMK behaviors
-
-For detailed contribution guidelines, please open an issue to discuss your ideas first.
+### Advanced Features
+- [Russian Layout](#russian-layout-generation)
+- [Tap-Dance](#tap-dance-recognition)
+- [Bluetooth](#bluetooth-command-handling)
+- [Matrix Layout](#matrix-layout)
 
 [*back to top*](#)
 
 ---
 
-## License
+## Supported Behaviors
 
-Distributed under the MIT License. See `LICENSE` file for more information.
+| ZMK Behavior | Description | OverKeys Output |
+|---|---|---|
+| `&kp A` | Key press | `A` |
+| `&mt LSHIFT A` | Mod-tap | `A` |
+| `&lt 1 SPACE` | Layer-tap | `SPC` |
+| `&mo 1` | Momentary layer | `MO(1)` |
+| `&tog 1` | Toggle layer | `TG(1)` |
+| `&lt_tog 1 A` | Layer-tap toggle | `A` |
+| `&hm LCTRL A` | Hold-mod | `A` |
+| `&tdJ` | Tap-dance | `J` |
+| `&bt BT_CLR` | Bluetooth clear | `BT CLR` |
+| `&bt BT_SEL 0` | Bluetooth select | `BT 0` |
+| `&out USB` | Output selection | `USB` |
+| `&bootloader` | Bootloader mode | `BOOT` |
+| `&sys_reset` | System reset | `RST` |
+| `&trans` | Transparent | `""` (empty) |
+| `&none` | None | `""` (empty) |
 
 [*back to top*](#)
 
 ---
 
-## Contact
+## Layer Detection
 
-Your Name / Maintainer
+The converter automatically assigns F-key triggers based on layer name keywords:
 
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- Email: your.email@example.com
-- Project Link: [https://github.com/YOUR_USERNAME/zmk-to-overkeys](https://github.com/YOUR_USERNAME/zmk-to-overkeys)
+| Layer Name Keywords | Trigger | Type |
+|---|---|---|
+| `lower`, `lwr`, `num`, `sym`, `number`, `symbols`, `pad` | `F14` | held |
+| `raise`, `rse`, `nav`, `navi`, `navigation`, `mov`, `cursor` | `F15` | held |
+| `fbuttons`, `fbt`, `fun`, `func`, `function`, `fkeys` | `F16` | held |
+| `adjust`, `adj`, `settings`, `set`, `config` | `F17` | held |
+| `ru`, `rus`, `russian`, `lang` | `F18` | toggle |
+
+> **Note:** Base layers (`base`, `default`, `qwerty`, `main`, `colemak`, `dvorak`, `workman`) receive no trigger — they become the default layout.
+
+For custom layer names, the converter uses heuristics to determine the appropriate trigger. Unknown layer names default to no trigger.
 
 [*back to top*](#)
 
 ---
 
-## Acknowledgments
+## Russian Layout Generation
 
-- [OverKeys](https://github.com/conventoangelo/OverKeys) – The amazing keyboard visualizer that makes this converter useful
-- [ZMK Firmware](https://zmk.dev/) – The powerful open-source firmware for programmable keyboards
-- [ZMK Documentation](https://zmk.dev/docs) – For behavior definitions and key codes
+If no Russian language layer is found in your keymap, the converter automatically generates one based on your base layer.
+
+The Russian layout uses the standard ЙЦУКЕН phonetic mapping:
+
+| English | Russian | English | Russian |
+|---|---|---|---|
+| `Q` | `Й` | `A` | `Ф` |
+| `W` | `Ц` | `S` | `Ы` |
+| `E` | `У` | `D` | `В` |
+| `R` | `К` | `F` | `А` |
+| `T` | `Е` | `G` | `П` |
+| `Y` | `Н` | `H` | `Р` |
+| `U` | `Г` | `J` | `О` |
+| `I` | `Ш` | `K` | `Л` |
+| `O` | `Щ` | `L` | `Д` |
+| `P` | `З` | `;` | `Ж` |
+| `[` | `Х` | `'` | `Э` |
+| `]` | `Ъ` | `,` | `Б` |
+| `.` | `Ю` | `/` | `.` |
+
+The generated Russian layer is assigned:
+- **Trigger:** `F18`
+- **Type:** `toggle`
 
 [*back to top*](#)
+
+---
+
+## Tap-Dance Recognition
+
+The converter recognizes tap-dance patterns and maps them intelligently:
+
+| ZMK Tap-Dance | OverKeys Output |
+|---|---|
+| `&tdJ` | `J` |
+| `&tdF` | `F` |
+| `&tdTaskmgr` | `ESC` |
+| `&td_tsk_mngr` | `ESC` |
+| `&tdLCMD` | `ENT` |
+| `&td_lcmd` | `ENT` |
+| `&tdRCMD` | `SPC` |
+| `&td_rcmd` | `SPC` |
+| `&td_e` | `E` |
+| `&td_w` | `W` |
+| `&td_i` | `I` |
+| `&td_o` | `O` |
+| `&td_custom_name` | `CUS` (truncated to 3 chars) |
+
+For custom tap-dance names not in the predefined map, the converter extracts the first 3 characters of the name.
+
+[*back to top*](#)
+
+---
+
+## Bluetooth Command Handling
+
+The converter properly handles Bluetooth commands that span multiple tokens:
+
+| ZMK Command | OverKeys Output |
+|---|---|
+| `&bt BT_CLR` | `BT CLR` |
+| `&bt BT_SEL 0` | `BT 0` |
+| `&bt BT_SEL 1` | `BT 1` |
+| `&bt BT_SEL 2` | `BT 2` |
+| `&bt BT_SEL 3` | `BT 3` |
+| `&bt BT_SEL 4` | `BT 4` |
+| `&bt BT_SEL 5` | `BT 5` |
+
+[*back to top*](#)
+
+---
+
+## Output Format
+
+The script generates a file with this structure:
