@@ -63,28 +63,35 @@ You can use the converter in two ways:
 
 **1. Download the script directly**
 
-```bash
-curl -O https://raw.githubusercontent.com/bvlgarin/zmk-to-overkeys/main/zmk_to_overkeys.py
-chmod +x zmk_to_overkeys.py
+Supported Behaviors
+ZMK Behavior	Description	OverKeys Output
+&kp A	Key press	A
+&mt LSHIFT A	Mod-tap	A
+&lt 1 SPACE	Layer-tap	SPC
+&mo 1	Momentary layer	MO(1)
+&tog 1	Toggle layer	TG(1)
+&lt_tog 1 A	Layer-tap toggle	A
+&hm LCTRL A	Hold-mod	A
+&tdJ	Tap-dance	J
+&bt BT_CLR	Bluetooth clear	BT CLR
+&bt BT_SEL 0	Bluetooth select	BT 0
+&out USB	Output selection	USB
+&bootloader	Bootloader mode	BOOT
+&sys_reset	System reset	RST
+&trans	Transparent	"" (empty)
+&none	None	"" (empty)
+<p align="right">(<a href="#overkeys-converter-for-zmk">back to top</a>)</p>
+Layer Detection
+The converter automatically assigns F-key triggers based on layer name keywords:
 
+Layer Name Keywords	Trigger	Type
+lower, lwr, num, sym, number, symbols, pad	F14	held
+raise, rse, nav, navi, navigation, mov, cursor	F15	held
+fbuttons, fbt, fun, func, function, fkeys	F16	held
+adjust, adj, settings, set, config	F17	held
+ru, rus, russian, lang	F18	toggle
+Note: Base layers (base, default, qwerty, main, colemak, dvorak, workman) receive no trigger — they become the default layout.
 
-dtsi
-default_layer {
-    display-name = "BASE";
-    bindings = <
-        &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U    &kp I    &kp O    &kp P
-        &kp A    &kp S    &kp D    &kp F    &kp G    &kp H    &kp J    &kp K    &kp L
-        &kp Z    &kp X    &kp C    &kp V    &kp B    &kp N    &kp M    &kp BSPC
-        &kp LGUI &kp LALT &kp SPACE &mo 1   &mo 2    &kp RET
-    >;
-};
+For custom layer names, the converter uses heuristics to determine the appropriate trigger. Unknown layer names default to no trigger.
 
-lower_layer {
-    display-name = "LOWER";
-    bindings = <
-        &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0
-        &kp EXCL &kp AT   &kp HASH &kp DLLR &kp PRCNT &kp CARET &kp AMPS &kp ASTRK &kp LPAR &kp RPAR
-        &trans   &kp MINUS &kp EQUAL &kp LBKT &kp RBKT &kp BSLH &kp GRAVE
-        &trans   &trans   &trans   &trans   &mo 1    &trans
-    >;
-};
+<p align="right">(<a href="#overkeys-converter-for-zmk">back to top</a>)</p>
