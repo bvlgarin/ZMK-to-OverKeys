@@ -27,10 +27,10 @@ BT_SEL auto-fix – Handles multi-token Bluetooth selection commands
 
 <div align="center">
 
-[![Release](https://img.shields.io/github/v/release/bvlgarin/zmk-to-overkeys?label=Release&style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/YOUR_USERNAME/zmk-to-overkeys/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/YOUR_USERNAME/zmk-to-overkeys/total?label=Downloads&style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/YOUR_USERNAME/zmk-to-overkeys/releases)
-[![License](https://img.shields.io/github/license/YOUR_USERNAME/zmk-to-overkeys?style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/YOUR_USERNAME/zmk-to-overkeys/blob/main/LICENSE)
-[![Stars](https://img.shields.io/github/stars/YOUR_USERNAME/zmk-to-overkeys?style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/YOUR_USERNAME/zmk-to-overkeys/stargazers)
+[![Release](https://img.shields.io/github/v/release/bvlgarin/zmk-to-overkeys?label=Release&style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/bvlgarin/zmk-to-overkeys/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/YOUR_USERNAME/zmk-to-overkeys/total?label=Downloads&style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/bvlgarin/zmk-to-overkeys/releases)
+[![License](https://img.shields.io/github/license/YOUR_USERNAME/zmk-to-overkeys?style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/bvlgarin/zmk-to-overkeys/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/YOUR_USERNAME/zmk-to-overkeys?style=for-the-badge&logo=github&logoColor=FAFBFE&labelColor=10151D&color=A87FFB)](https://github.com/bvlgarin/zmk-to-overkeys/stargazers)
 
 **Automatically convert ZMK keyboard layouts to OverKeys JSON format**
 
@@ -124,3 +124,74 @@ The converter automatically assigns F-key triggers based on layer name keywords:
 # Download the script
 curl -O https://raw.githubusercontent.com/YOUR_USERNAME/zmk-to-overkeys/main/zmk_to_overkeys.py
 chmod +x zmk_to_overkeys.py
+
+### Usage
+```bash
+python zmk_to_overkeys.py path/to/your/keymap.keymap
+
+### Example
+```bash
+python zmk_to_overkeys.py config/corne.keymap
+
+Output: config/corne.overkeys.txt — ready to copy into OverKeys.
+
+### Usage Examples
+
+Basic ZMK Keymap
+Input (corne.keymap):
+
+dts
+default_layer {
+    display-name = "BASE";
+    bindings = <
+        &kp Q    &kp W    &kp E    &kp R    &kp T
+        &kp A    &kp S    &kp D    &kp F    &kp G
+        &kp Z    &kp X    &kp C    &kp V    &kp B
+        &kp SPACE  &mo 1   &kp RET
+    >;
+};
+
+lower_layer {
+    display-name = "LOWER";
+    bindings = <
+        &kp N1   &kp N2   &kp N3   &kp N4   &kp N5
+        &kp EXCL &kp AT   &kp HASH &kp DLLR &kp PRCNT
+        &trans   &kp MINUS &kp EQUAL &kp BSPC
+    >;
+};
+Output (OverKeys JSON):
+
+json
+"userLayouts": [
+    {
+        "name": "DEFAULT",
+        "keys": [
+            ["Q","W","E","R","T","Y","U","I","O","P","",""],
+            ["A","S","D","F","G","H","J","K","L","","",""],
+            ["Z","X","C","V","B","N","M","BSPC","","","",""],
+            ["LGUI","LALT","SPC","MO(1)","ENT","","","","","","",""]
+        ],
+        "trigger": "",
+        "type": ""
+    },
+    {
+        "name": "LOWER",
+        "keys": [
+            ["1","2","3","4","5","6","7","8","9","0","",""],
+            ["!","@","#","$","%","^","&","*","(",")","",""],
+            ["","-","=","[","]","\\","`","","","","",""],
+            ["","","","","","","","","","","",""]
+        ],
+        "trigger": "F14",
+        "type": "held"
+    }
+],
+"defaultUserLayout": "DEFAULT"
+Advanced Examples
+dts
+&mt LSHIFT A     →  A
+&tdJ             →  J
+&bt BT_SEL 0     →  BT 0
+&mo 1            →  MO(1)
+&tog 2           →  TG(2)
+&lt_tog 1 SPACE  →  SPC
