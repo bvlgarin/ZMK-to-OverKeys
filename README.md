@@ -38,5 +38,5 @@ You can use the converter in two ways:
 **1. Download the script directly**
 
 ```bash
-curl -O https://raw.githubusercontent.com/bvlgarin/zmk-to-overkeys/main/zmk_to_overkeys.py
+https://raw.githubusercontent.com/bvlgarin/zmk-to-overkeys/main/zmk_to_overkeys.py
 chmod +x zmk_to_overkeys.py
