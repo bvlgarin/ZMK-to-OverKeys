@@ -33,6 +33,4 @@ If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle,
 
 ### Installation
 
-You can use the converter in two ways:
-
 **to be continued
