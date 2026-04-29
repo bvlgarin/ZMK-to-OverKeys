@@ -2,7 +2,6 @@
 
 ### Automatically convert ZMK keyboard layouts to OverKeys JSON
 
-<br />
 
 ## About The Project
 
