@@ -46,3 +46,10 @@ chmod +x zmk_to_overkeys.py
 ```bash
 git clone https://github.com/YOUR_USERNAME/zmk-to-overkeys.git
 cd zmk-to-overkeys
+
+### Requirements
+
+- Python 3.6 or higher
+- ZMK keymap file (`.dtsi` or `.keymap` format)
+
+For detailed usage instructions, see the [Documentation](#documentation) section below.
