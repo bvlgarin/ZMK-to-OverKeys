@@ -2,6 +2,7 @@
 
 ### Automatically convert ZMK keyboard layouts to OverKeys JSON
 
+<br />
 
 ## About The Project
 
@@ -28,3 +29,14 @@ If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle,
 - **Tap-Dance Recognition** – Smart mapping for `&td*` patterns
 - **Zero Dependencies** – Pure Python 3.6+, no external packages required
 
+## Getting Started
+
+### Installation
+
+You can use the converter in two ways:
+
+**1. Download the script directly**
+
+```bash
+curl -O https://raw.githubusercontent.com/YOUR_USERNAME/zmk-to-overkeys/main/zmk_to_overkeys.py
+chmod +x zmk_to_overkeys.py
