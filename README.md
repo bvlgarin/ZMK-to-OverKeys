@@ -37,7 +37,7 @@ If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle,
 
 ---
 
-## Файл: `docs/documentation.md`
+## Файл: `documentation`
 
 # Documentation
 
@@ -50,7 +50,7 @@ Complete documentation for the **ZMK to OverKeys Converter**.
 - [Layer Detection](layer-detection.md)
 - [Output Format](output-format.md)
 - [Russian Layout Generation](russian-layout.md)
-- [Tap-Dance Recognition]((https://github.com/bvlgarin/ZMK-to-OverKeys/blob/main/documentation/tap-dance.md#tap-dance-recognition))
+- [Tap-Dance Recognition](tap-dance.md)
 - [Bluetooth Command Handling](bluetooth.md)
 - [Matrix Layout](output-format.md#matrix-layout-42-keys)
 - [Contributing](contributing.md)
