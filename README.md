@@ -39,7 +39,6 @@ If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle,
 
 ## Файл: `docs/documentation.md`
 
-```markdown
 # Documentation
 
 Complete documentation for the **ZMK to OverKeys Converter**.
