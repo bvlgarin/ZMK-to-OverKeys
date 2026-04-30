@@ -34,55 +34,6 @@ If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle,
 ### Installation
 
 
-
----
-
-## Файл: `documentation`
-
-# Documentation
-
-Complete documentation for the **ZMK to OverKeys Converter**.
-
-## Table of Contents
-
-- [Getting Started](getting-started.md)
-- [Supported Behaviors](supported-behaviors.md)
-- [Layer Detection](layer-detection.md)
-- [Output Format](output-format.md)
-- [Russian Layout Generation](russian-layout.md)
-- [Tap-Dance Recognition](tap-dance.md)
-- [Bluetooth Command Handling](bluetooth.md)
-- [Matrix Layout](output-format.md#matrix-layout-42-keys)
-- [Contributing](contributing.md)
-
-## Quick Links
-
-| Section | Description |
-|---------|-------------|
-| [Installation](getting-started.md#installation) | How to install the converter |
-| [Usage](getting-started.md#usage) | Basic usage examples |
-| [Behavior Mapping](supported-behaviors.md) | Complete ZMK to OverKeys mapping |
-| [Layer Triggers](layer-detection.md) | How F14-F18 triggers are assigned |
-| [Russian Layout](russian-layout.md) | Auto-generated ЙЦУКЕН layout |
-| [Tap-Dance](tap-dance.md) | Supported tap-dance patterns |
-| [Bluetooth](bluetooth.md) | BT_CLR and BT_SEL handling |
-
-## Example: Complete Conversion
-
-See [Getting Started - Quick Start Example](getting-started.md#quick-start-example) for a complete walkthrough.
-
-## Adding to OverKeys
-
-Once you have generated the `.overkeys.txt` file:
-
-1. Open OverKeys on your Windows system
-2. Go to **Settings → User Layouts**
-3. Copy the entire `"userLayouts": [...]` block from the generated file
-4. Paste it into your OverKeys `settings.json` or user configuration
-5. Set `"defaultUserLayout"` to your base layer name (e.g., `"DEFAULT"`)
-6. Save and restart OverKeys
-
-
 **to be continued
 
 
