@@ -27,8 +27,7 @@ lower_layer {
 }
 ```
 
-
-# Output Format
+# Output OverKeys
 
 The script generates a file with the following JSON structure.
 
