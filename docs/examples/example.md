@@ -1,5 +1,6 @@
+# Input ZMK Keymap
 
-# Default Layer
+## Default Layer
 
 ```plaintext
 default_layer {
@@ -12,7 +13,7 @@ default_layer {
 }
 ```
 
-# Lower Layer
+### Lower Layer
 
 ```plaintext
 lower_layer {
@@ -27,33 +28,43 @@ lower_layer {
 ```
 
 
+# Output Format
 
+The script generates a file with the following JSON structure.
 
+## Complete JSON Structure
 
-
+```json
+// ============================================================
+// OverKeys Layout JSON
+// Generated from: corne.keymap
+// Date: 2024-01-15 14:30:00
+// ============================================================
 
 "userLayouts": [
     {
         "name": "DEFAULT",
-        "keys": [
-            ["Q","W","E","R","T","Y","U","I","O","P","",""],
-            ["A","S","D","F","G","H","J","K","L","","",""],
-            ["Z","X","C","V","B","N","M","BSPC","","","",""],
-            ["LGUI","LALT","SPC","MO(1)","MO(2)","ENT","","","","","",""]
-        ],
+        "keys": [ /* 4x12 matrix */ ],
         "trigger": "",
         "type": ""
     },
     {
         "name": "LOWER",
-        "keys": [
-            ["1","2","3","4","5","6","7","8","9","0","",""],
-            ["!","@","#","$","%","^","&","*","(",")","",""],
-            ["","-","=","[","]","\\\\","`","","","","",""],
-            ["","","","","MO(1)","","","","","","",""]
-        ],
+        "keys": [ /* 4x12 matrix */ ],
         "trigger": "F14",
         "type": "held"
+    },
+    {
+        "name": "RAISE",
+        "keys": [ /* 4x12 matrix */ ],
+        "trigger": "F15",
+        "type": "held"
+    },
+    {
+        "name": "RUSSIAN",
+        "keys": [ /* Auto-generated ЙЦУКЕН */ ],
+        "trigger": "F18",
+        "type": "toggle"
     }
 ],
 "defaultUserLayout": "DEFAULT"
