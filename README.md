@@ -68,7 +68,6 @@ Complete documentation for **ZMK to OverKeys Converter** is available in the [do
 
 - [Installation](docs/getting-started.md#installation)
 - [Usage](docs/getting-started.md#usage)
-- [Requirements](docs/getting-started.md#requirements)
 
 ### User Guide
 
@@ -84,6 +83,7 @@ Complete documentation for **ZMK to OverKeys Converter** is available in the [do
 
 - [Complete Documentation](docs/documentation.md)
 - [Contributing Guide](docs/contributing.md)
+- [Requirements](docs/getting-started.md#requirements)
 - [Changelog](changelog.md)
 
 ## Example
