@@ -10,3 +10,4 @@
 - [Bluetooth](bluetooth.md)
 - [Output Format](output-format.md)
 - [Contributing](contributing.md)
+- [Requirements](requirements.md)
