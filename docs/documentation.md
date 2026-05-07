@@ -2,12 +2,12 @@
 
 ## Table of Contents
 
-- [Getting Started](getting-started.md)
-- [Supported Behaviors](supported-behaviors.md)
-- [Layer Detection](layer-detection.md)
-- [Russian Layout](russian-layout.md)
-- [Tap-Dance](tap-dance.md)
 - [Bluetooth](bluetooth.md)
-- [Output Format](output-format.md)
 - [Contributing](contributing.md)
+- [Getting Started](getting-started.md)
+- [Layer Detection](layer-detection.md)
+- [Output Format](output-format.md)
 - [Requirements](requirements.md)
+- [Russian Layout](russian-layout.md)
+- [Supported Behaviors](supported-behaviors.md)
+- [Tap-Dance](tap-dance.md)
