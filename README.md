@@ -99,7 +99,7 @@ Complete documentation for **ZMK to OverKeys Converter** is available in the [do
 
 ## Example
 
-See the [complete conversion example](examples/example.md) for a detailed walkthrough with ZMK code and OverKeys JSON output.
+See the [complete conversion example](docs/examples/example.md) for a detailed walkthrough with ZMK code and OverKeys JSON output.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
