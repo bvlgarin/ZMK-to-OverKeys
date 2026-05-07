@@ -6,8 +6,6 @@
 
 ## About The Project
 
-**OverKeys Converter for ZMK** is a Python script that transforms ZMK firmware keymap files (.dtsi or .keymap) into the JSON format required by [OverKeys](https://github.com/conventoangelo/OverKeys) — a keyboard layout visualizer for Windows.
-
 If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle, or any split keyboard) and want to visualize your layers in OverKeys, this converter does all the heavy lifting for you.
 
 ## Features
