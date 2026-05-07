@@ -39,8 +39,6 @@ You can use the converter in several ways:
    chmod +x zmk_to_overkeys.py
    ```
 
-For detailed installation instructions, see the [Getting Started Guide](docs/getting-started.md).
-
 ### Basic Usage
 
 ```bash
