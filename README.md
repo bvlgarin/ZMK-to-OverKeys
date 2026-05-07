@@ -10,7 +10,6 @@
 
 If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle, or any split keyboard) and want to visualize your layers in OverKeys, this converter does all the heavy lifting for you.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## Features
