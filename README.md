@@ -81,7 +81,7 @@ Complete documentation for **ZMK to OverKeys Converter** is available in the [do
 
 - [Complete Documentation](docs/documentation.md)
 - [Contributing Guide](docs/contributing.md)
-- [Requirements](docs/getting-started.md#requirements)
+- [Requirements](docs/requirements.md)
 - [Changelog](changelog.md)
 
 ## Example
