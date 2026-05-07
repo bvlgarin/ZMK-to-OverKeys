@@ -54,4 +54,6 @@ lower_layer {
 "defaultUserLayout": "DEFAULT"
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p style="text-align: right;">
+  (<a href="#readme-top">back to top</a>)
+</p>
