@@ -97,7 +97,7 @@ Once you have generated the .overkeys.txt file:
 3. Copy the entire "userLayouts": [...] block from the generated file
 4. Paste it into your OverKeys settings.json or user configuration
 5. Set "defaultUserLayout" to your base layer name (e.g., "DEFAULT")
-6. Save and restart OverKeys
+6. Save and Reload Config
 
 Your ZMK layers will now be available in OverKeys!
 
