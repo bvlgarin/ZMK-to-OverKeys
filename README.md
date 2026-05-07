@@ -10,8 +10,6 @@
 
 If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle, or any split keyboard) and want to visualize your layers in OverKeys, this converter does all the heavy lifting for you.
 
-
-
 ## Features
 
 - Full ZMK Support (&kp, &mt, &lt, &mo, &tog, &td, &bt)
@@ -20,8 +18,6 @@ If you're using a programmable keyboard with ZMK firmware (Corne, Lily58, Sofle,
 - Russian Layout Generation (ЙЦУКЕН)
 - 42-Key Matrix Support
 - Zero Dependencies
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started
 
@@ -45,8 +41,6 @@ You can use the converter in several ways:
 
 For detailed installation instructions, see the [Getting Started Guide](docs/getting-started.md).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Basic Usage
 
 ```bash
@@ -65,8 +59,6 @@ python zmk_to_overkeys.py config/corne.keymap
 
 - Python 3.6 or higher
 - ZMK keymap file (.dtsi or .keymap format)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Documentation
 
@@ -94,13 +86,9 @@ Complete documentation for **ZMK to OverKeys Converter** is available in the [do
 - [Contributing Guide](docs/contributing.md)
 - [Changelog](changelog.md)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Example
 
 See the [complete conversion example](docs/examples/example.md) for a detailed walkthrough with ZMK code and OverKeys JSON output.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Adding to OverKeys
 
@@ -115,8 +103,6 @@ Once you have generated the .overkeys.txt file:
 
 Your ZMK layers will now be available in OverKeys!
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Contributing
 
 Contributions are what make the open-source community such an amazing place to learn and collaborate. Any contributions to **ZMK to OverKeys Converter** are greatly appreciated.
@@ -125,13 +111,9 @@ If you have suggestions for improvements, bug fixes, or new features, please fee
 
 See [Contributing Guide](docs/contributing.md) for more details.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## License
 
 Distributed under the MIT License. See LICENSE file for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Acknowledgments
 
