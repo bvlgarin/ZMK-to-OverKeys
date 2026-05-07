@@ -1,5 +1,3 @@
-<div id="readme-top"></div>
-
 # OverKeys Converter for ZMK
 
 **Automatically convert ZMK keyboard layouts to OverKeys JSON**
