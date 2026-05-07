@@ -81,12 +81,13 @@ Complete documentation for **ZMK to OverKeys Converter** is available in the [do
 
 ### User Guide
 
-- [Supported Behaviors](docs/supported-behaviors.md)
+- [Bluetooth Command Handling](docs/bluetooth.md)
 - [Layer Detection](docs/layer-detection.md)
 - [Output Format](docs/output-format.md)
 - [Russian Layout Generation](docs/russian-layout.md)
+- [Supported Behaviors](docs/supported-behaviors.md)
 - [Tap-Dance Recognition](docs/tap-dance.md)
-- [Bluetooth Command Handling](docs/bluetooth.md)
+
 
 ### Reference
 
